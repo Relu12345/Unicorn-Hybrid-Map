@@ -126,6 +126,15 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.studios.taprobana.openai": {
+      "version": "https://github.com/TaprobanaStudios/OpenAI-Unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "hash": "fd3ea3783f5402d4bf2744980188092585577071"
+    },
     "com.unity.ai.navigation": {
       "version": "1.1.5",
       "depth": 2,
@@ -223,7 +232,7 @@
     },
     "com.unity.nuget.newtonsoft-json": {
       "version": "3.2.1",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

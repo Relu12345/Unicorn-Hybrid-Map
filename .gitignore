@@ -72,3 +72,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 *.csproj
+
+# Ignore API Keys
+/Assets/API_Keys/*

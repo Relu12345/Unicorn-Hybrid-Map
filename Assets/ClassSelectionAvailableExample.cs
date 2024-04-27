@@ -1,5 +1,6 @@
 using Gtec.UnityInterface;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using static Gtec.UnityInterface.BCIManager;
 
@@ -7,10 +8,29 @@ public class ClassSelectionAvailableExample : MonoBehaviour
 {
     private uint _selectedClass = 0;
     private bool _update = false;
+    [SerializeField] ERPFlashController3D _flashController;
+    [SerializeField] Dictionary<int, Renderer> _selectedObjects;
     void Start()
     {
         //attach to class selection available event
         BCIManager.Instance.ClassSelectionAvailable += OnClassSelectionAvailable;
+
+        //get selected objects
+        _selectedObjects = new Dictionary<int, Renderer>();
+        List<ERPFlashObject3D> applicationObjects = _flashController.ApplicationObjects;
+        foreach(ERPFlashObject3D applicationObject in applicationObjects)
+        {
+            Renderer[] renderers = applicationObject.GameObject.GetComponentsInChildren<Renderer>();
+            foreach(Renderer renderer in renderers)
+            {
+                if (renderer.name.Equals("selected"))
+                    _selectedObjects.Add(applicationObject.ClassId, renderer);
+            }
+        }
+
+        // disable/hide selected objects by default
+        foreach(KeyValuePair<int, Renderer> kvp in _selectedObjects)
+            kvp.Value.gameObject.SetActive(false);
     }
 
     void OnApplicationQuit()
@@ -24,24 +44,14 @@ public class ClassSelectionAvailableExample : MonoBehaviour
         //TODO ADD YOUR CODE HERE
         if(_update)
         {
-            switch (_selectedClass)
-            {
-                case 0:
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
+            foreach (KeyValuePair<int, Renderer> kvp in _selectedObjects)
+                kvp.Value.gameObject.SetActive(false);
 
+            if (_selectedClass > 0)
+            {
+                _selectedObjects[(int)_selectedClass].gameObject.SetActive(true);
             }
+
             _update = false;
         } 
     }
