@@ -8,10 +8,13 @@ public class ClassSelectionAvailableExample : MonoBehaviour
 {
     private uint _selectedClass = 0;
     private bool _update = false;
+    private StreetViewAPI _streetViewAPI;
+
     [SerializeField] ERPFlashController3D _flashController;
     [SerializeField] Dictionary<int, Renderer> _selectedObjects;
     void Start()
     {
+        _streetViewAPI = FindAnyObjectByType<StreetViewAPI>();
         //attach to class selection available event
         BCIManager.Instance.ClassSelectionAvailable += OnClassSelectionAvailable;
 
@@ -50,6 +53,25 @@ public class ClassSelectionAvailableExample : MonoBehaviour
             if (_selectedClass > 0)
             {
                 _selectedObjects[(int)_selectedClass].gameObject.SetActive(true);
+                switch(_selectedClass)
+                {
+                    // North
+                    case 1:
+                        _streetViewAPI.MoveNorth();
+                        break;
+                    // West
+                    case 2:
+                        _streetViewAPI.MoveEast();
+                        break;
+                    // East
+                    case 3:
+                        _streetViewAPI.MoveWest();
+                        break;
+                    // South
+                    case 4:
+                        _streetViewAPI.MoveSouth();
+                        break;
+                }
             }
 
             _update = false;

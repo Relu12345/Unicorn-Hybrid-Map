@@ -38,6 +38,7 @@ public class AutoStartCalibrate : MonoBehaviour
                 Debug.LogError("Button to click is not assigned!");
             }
         }
+        Debug.Log("IM HERE");
     }
 
 

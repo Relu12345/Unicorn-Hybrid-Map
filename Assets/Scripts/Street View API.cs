@@ -40,9 +40,13 @@ public class StreetViewAPI : MonoBehaviour
     private int fov = 90;
     private Texture2D frontTex, leftTex, rightTex, backTex, upTex, downTex;
 
+    private float currentLatitude, currentLongitude;
+
     private void Start()
     {
-        GenerateCubemap("-13.1650709", "-72.5447154");
+        currentLatitude = -13.1650709f;
+        currentLongitude = -72.5447154f;
+        GenerateCubemap(currentLatitude.ToString(), currentLongitude.ToString());
         addressInputField.onEndEdit.AddListener(OnAddressEndEdit);
     }
 
@@ -74,10 +78,10 @@ public class StreetViewAPI : MonoBehaviour
             yield break;
         }
 
-        string latitude = geocodeDataArray[0].lat;
-        string longitude = geocodeDataArray[0].lon;
+        currentLatitude = float.Parse(geocodeDataArray[0].lat);
+        currentLongitude = float.Parse(geocodeDataArray[0].lon);
 
-        GenerateCubemap(latitude, longitude);
+        GenerateCubemap(currentLatitude.ToString(), currentLongitude.ToString());
     }
 
 
@@ -150,5 +154,55 @@ public class StreetViewAPI : MonoBehaviour
         skyboxMaterial.SetTexture("_DownTex", downTex);
 
         RenderSettings.skybox = skyboxMaterial;
+    }
+
+    // Call this function when the North button is pressed
+    public void MoveNorth()
+    {
+        MoveInDirection(0, 5); // 0 degrees heading (North), 5 meters forward
+    }
+
+    // Call this function when the South button is pressed
+    public void MoveSouth()
+    {
+        MoveInDirection(180, 5); // 180 degrees heading (South), 5 meters forward
+    }
+
+    // Call this function when the East button is pressed
+    public void MoveEast()
+    {
+        MoveInDirection(90, 5); // 90 degrees heading (East), 5 meters forward
+    }
+
+    // Call this function when the West button is pressed
+    public void MoveWest()
+    {
+        MoveInDirection(270, 5); // 270 degrees heading (West), 5 meters forward
+    }
+
+    // Function to move in a specific direction by a certain distance
+    private void MoveInDirection(float heading, float distance)
+    {
+        // Convert latitude and longitude to float
+        float lat = currentLatitude;
+        float lon = currentLongitude;
+
+        // Calculate new latitude and longitude based on the direction and distance
+        float newLat = lat + (distance / 111111); // Approximately 1 degree latitude = 111111 meters
+        float newLon = lon;
+
+        if (heading == 0 || heading == 180)
+        {
+            // Moving North or South changes longitude
+            newLon = lon + (distance / (111111 * Mathf.Cos(lat * Mathf.Deg2Rad)));
+        }
+        else if (heading == 90 || heading == 270)
+        {
+            // Moving East or West changes latitude
+            newLon = lon + (distance / (111111 * Mathf.Cos(lat * Mathf.Deg2Rad)));
+        }
+
+        // Call GenerateCubemap with new latitude and longitude
+        GenerateCubemap(newLat.ToString(), newLon.ToString());
     }
 }
