@@ -11,8 +11,8 @@ using com.studios.taprobana;
 public class GePeTo_Integration : MonoBehaviour
 {
     [SerializeField] private Button Button;
-    [SerializeField] private TextMeshProUGUI inputText;
-    [SerializeField] private TextMeshProUGUI outputText;
+    [SerializeField] private TMP_InputField input;
+    [SerializeField] private TextMeshProUGUI output;
     [SerializeField] private ApiConfig apiConfig;
 
     private ChatCompletionsApi chatCompletionsApi;
@@ -38,16 +38,12 @@ public class GePeTo_Integration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        chatCompletionsApi = new(apiConfig.get());
-        chatCompletionsApi.ConversationHistoryMemory = 5;
-        chatCompletionsApi.SetSystemMessage("You are Mario");
-
         Button.onClick.AddListener(OnSubmitButtonClicked);
     }
 
     private void OnSubmitButtonClicked()
     {
-        string userPrompt = $"Write a small paragraph of information about the following location: {inputText.text}";
+        string userPrompt = $"Write a small paragraph of information about the following location: {input.text}";
         SendRequestToAPI(userPrompt);
 
         // DEBUG
@@ -58,8 +54,13 @@ public class GePeTo_Integration : MonoBehaviour
     {
         try
         {
+            chatCompletionsApi = new(apiConfig.get());
+            chatCompletionsApi.ConversationHistoryMemory = 5;
+            chatCompletionsApi.SetSystemMessage("You are a tour guide");
+
             ChatCompletionsRequest chatCompletionsRequest = new ChatCompletionsRequest();
             Message message = new(Roles.USER, userPrompt);
+            chatCompletionsRequest.Messages.Clear();
 
             chatCompletionsRequest.Model = "gpt-3.5-turbo-0125";
             chatCompletionsRequest.AddMessage(message);
@@ -67,7 +68,7 @@ public class GePeTo_Integration : MonoBehaviour
             ChatCompletionsResponse res = await chatCompletionsApi.CreateChatCompletionsRequest(chatCompletionsRequest);
             string response = res.GetResponseMessage();
 
-            outputText.text = response;
+            output.text = response;
             Debug.Log($"GePeTo's Response: {response}");
         }
         catch (OpenAiRequestException exception)

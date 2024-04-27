@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.huggingface.api": "https://github.com/huggingface/unity-api.git",
     "com.meta.xr.sdk.all": "64.0.0",
     "com.studios.taprobana.openai": "https://github.com/TaprobanaStudios/OpenAI-Unity.git",
     "com.unity.collab-proxy": "2.2.0",
