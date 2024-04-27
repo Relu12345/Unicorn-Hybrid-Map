@@ -4,10 +4,11 @@ using UnityEngine;
 public class MRtoVR : MonoBehaviour
 {
     // Duration over which the opacity will change
-    public float fadeDuration = 3.0f;
+    public float fadeDuration = 1.0f;
 
     // Reference to the Passthrough layer
     private OVRPassthroughLayer passthroughLayer;
+    public GameObject StreetView;
 
     void Start()
     {
@@ -27,7 +28,7 @@ public class MRtoVR : MonoBehaviour
         while (currentTime < fadeDuration)
         {
             // Calculate the current opacity
-            float alpha = Mathf.Lerp(0f, 1f, currentTime / fadeDuration);
+            float alpha = Mathf.Lerp(1f, 0f, currentTime / fadeDuration);
 
             // Set the current opacity to the Passthrough layer
             passthroughLayer.textureOpacity = alpha;
@@ -36,6 +37,7 @@ public class MRtoVR : MonoBehaviour
             currentTime += Time.deltaTime;
             yield return null;
         }
+        StreetView.SetActive(true);
         // Ensure the opacity is set to 0 at the end
         passthroughLayer.textureOpacity = 0f;
     }
