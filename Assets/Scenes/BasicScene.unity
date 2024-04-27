@@ -243,8 +243,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addressInputField: {fileID: 522681592}
   skyboxMaterial: {fileID: 2100000, guid: 7d161d03fe26fca49af451a032fc1491, type: 2}
-  mapsApiKey: AIzaSyDvYC9JpchMJq708bJlFJWvM9HAHS2JBQE
-  geocodeApiKey: 6628bfc28cddc227489924oycf6c761
+  mapsApiKey: 
+  geocodeApiKey: 
 --- !u!1 &91449506
 GameObject:
   m_ObjectHideFlags: 0
