@@ -15,7 +15,7 @@ public class AutoStartCalibrate : MonoBehaviour
             if (buttonToClick != null)
             {
                 // Invoke the button click after a short delay
-                StartCoroutine(WaitForSeconds(10f));
+                StartCoroutine(WaitForSeconds(15f));
                 Invoke("ClickButton", 0.1f);
             }
             else
@@ -26,7 +26,7 @@ public class AutoStartCalibrate : MonoBehaviour
         else
         {
 
-            StartCoroutine(WaitForSeconds(3f));
+            StartCoroutine(WaitForSeconds(8f));
             // Check if the button to click is assigned
             if (buttonToClick != null)
             {
