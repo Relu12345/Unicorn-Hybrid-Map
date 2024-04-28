@@ -14,7 +14,7 @@ public class Speech2Text : MonoBehaviour
     private byte[] bytes;
     private bool recording;
 
-public static Speech2Text instance;
+    public static Speech2Text instance;
     private void Awake()
     {
         if (instance == null)
@@ -51,7 +51,7 @@ public static Speech2Text instance;
         //outputText.color = Color.white;
         input.text = "Recording...";
         startButton.interactable = false;
-        StartCoroutine(RecordForSeconds(1f));
+        StartCoroutine(RecordForSeconds(4f));
     }
 
     private IEnumerator RecordForSeconds(float duration)
@@ -81,7 +81,7 @@ public static Speech2Text instance;
         HuggingFaceAPI.AutomaticSpeechRecognition(bytes, response => {
             //outputText.color = Color.white;
             input.text = response;
-            GePeTo_Integration.instance.OnSubmitButtonClicked();
+            //GePeTo_Integration.instance.OnSubmitButtonClicked();
             startButton.interactable = true;
         }, error => {
             //outputText.color = Color.red;
