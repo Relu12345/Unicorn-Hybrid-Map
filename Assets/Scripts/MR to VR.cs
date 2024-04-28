@@ -8,7 +8,6 @@ public class MRtoVR : MonoBehaviour
 
     // Reference to the Passthrough layer
     private OVRPassthroughLayer passthroughLayer;
-    public GameObject StreetView;
 
     void Start()
     {
@@ -37,7 +36,6 @@ public class MRtoVR : MonoBehaviour
             currentTime += Time.deltaTime;
             yield return null;
         }
-        StreetView.SetActive(true);
         // Ensure the opacity is set to 0 at the end
         passthroughLayer.textureOpacity = 0f;
     }

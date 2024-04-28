@@ -26,7 +26,7 @@ public class GePeTo_Integration : MonoBehaviour
             Initialise();
         }
         else
-            DestroyImmediate(gameObject);
+            Destroy(gameObject);
     }
     bool _initialised = false;
     private void Initialise()
@@ -41,7 +41,7 @@ public class GePeTo_Integration : MonoBehaviour
         Button.onClick.AddListener(OnSubmitButtonClicked);
     }
 
-    private void OnSubmitButtonClicked()
+    public void OnSubmitButtonClicked()
     {
         string userPrompt = $"Write a small paragraph of information about the following location: {input.text}";
         SendRequestToAPI(userPrompt);

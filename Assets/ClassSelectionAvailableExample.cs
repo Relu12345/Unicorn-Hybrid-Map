@@ -8,13 +8,13 @@ public class ClassSelectionAvailableExample : MonoBehaviour
 {
     private uint _selectedClass = 0;
     private bool _update = false;
-    private StreetViewAPI _streetViewAPI;
+    public StreetViewAPI _streetViewAPI;
+    private bool test = false;
 
     [SerializeField] ERPFlashController3D _flashController;
     [SerializeField] Dictionary<int, Renderer> _selectedObjects;
     void Start()
     {
-        _streetViewAPI = FindAnyObjectByType<StreetViewAPI>();
         //attach to class selection available event
         BCIManager.Instance.ClassSelectionAvailable += OnClassSelectionAvailable;
 
@@ -42,10 +42,16 @@ public class ClassSelectionAvailableExample : MonoBehaviour
         BCIManager.Instance.ClassSelectionAvailable -= OnClassSelectionAvailable;
     }
 
+    public void StartAPI()
+    {
+        _streetViewAPI.gameObject.SetActive(true);
+        test = true;
+    }
+
     void Update()
     {
         //TODO ADD YOUR CODE HERE
-        if(_update)
+        if(_update && test)
         {
             foreach (KeyValuePair<int, Renderer> kvp in _selectedObjects)
                 kvp.Value.gameObject.SetActive(false);
@@ -53,7 +59,7 @@ public class ClassSelectionAvailableExample : MonoBehaviour
             if (_selectedClass > 0)
             {
                 _selectedObjects[(int)_selectedClass].gameObject.SetActive(true);
-                switch(_selectedClass)
+                switch (_selectedClass)
                 {
                     // North
                     case 1:
@@ -88,6 +94,7 @@ public class ClassSelectionAvailableExample : MonoBehaviour
         ClassSelectionAvailableEventArgs ea = (ClassSelectionAvailableEventArgs)e;
        _selectedClass = ea.Class;
         _update = true;
-        Debug.Log(string.Format("Selected class: {0}", ea.Class));
+       // Debug.Log(string.Format("Selected class: {0}", ea.Class));
+
     }
 }

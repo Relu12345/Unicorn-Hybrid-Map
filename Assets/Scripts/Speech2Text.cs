@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using HuggingFace.API;
 using TMPro;
@@ -7,7 +8,6 @@ using UnityEngine.UI;
 public class Speech2Text : MonoBehaviour
 {
     [SerializeField] private Button startButton;
-    [SerializeField] private Button stopButton;
     [SerializeField] private TMP_InputField input;
 
     private AudioClip clip;
@@ -17,8 +17,6 @@ public class Speech2Text : MonoBehaviour
     private void Start()
     {
         startButton.onClick.AddListener(StartRecording);
-        stopButton.onClick.AddListener(StopRecording);
-        stopButton.interactable = false;
     }
 
     private void Update()
@@ -34,9 +32,16 @@ public class Speech2Text : MonoBehaviour
         //outputText.color = Color.white;
         input.text = "Recording...";
         startButton.interactable = false;
-        stopButton.interactable = true;
-        clip = Microphone.Start(null, false, 10, 44100);
+        StartCoroutine(RecordForSeconds(3f));
+    }
+
+    private IEnumerator RecordForSeconds(float duration)
+    {
+        yield return new WaitForSeconds(duration + 2);
+        clip = Microphone.Start(null, false, (int)duration, 44100);
+        yield return new WaitForSeconds(duration);
         recording = true;
+        StopRecording();
     }
 
     private void StopRecording()
@@ -54,10 +59,10 @@ public class Speech2Text : MonoBehaviour
     {
         //outputText.color = Color.yellow;
         input.text = "Processing...";
-        stopButton.interactable = false;
         HuggingFaceAPI.AutomaticSpeechRecognition(bytes, response => {
             //outputText.color = Color.white;
             input.text = response;
+            GePeTo_Integration.instance.OnSubmitButtonClicked();
             startButton.interactable = true;
         }, error => {
             //outputText.color = Color.red;

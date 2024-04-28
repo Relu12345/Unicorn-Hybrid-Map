@@ -159,24 +159,28 @@ public class StreetViewAPI : MonoBehaviour
     // Call this function when the North button is pressed
     public void MoveNorth()
     {
+        Debug.Log("[STREET] Selected North");
         MoveInDirection(0, 5); // 0 degrees heading (North), 5 meters forward
     }
 
     // Call this function when the South button is pressed
     public void MoveSouth()
     {
+        Debug.Log("[STREET] Selected South");
         MoveInDirection(180, 5); // 180 degrees heading (South), 5 meters forward
     }
 
     // Call this function when the East button is pressed
     public void MoveEast()
     {
+        Debug.Log("[STREET] Selected East");
         MoveInDirection(90, 5); // 90 degrees heading (East), 5 meters forward
     }
 
     // Call this function when the West button is pressed
     public void MoveWest()
     {
+        Debug.Log("[STREET] Selected West");
         MoveInDirection(270, 5); // 270 degrees heading (West), 5 meters forward
     }
 
@@ -201,6 +205,9 @@ public class StreetViewAPI : MonoBehaviour
             // Moving East or West changes latitude
             newLon = lon + (distance / (111111 * Mathf.Cos(lat * Mathf.Deg2Rad)));
         }
+
+        Debug.Log($"[STREET] Old lat: {lat}; New lat: {newLat}");
+        Debug.Log($"[STREET] Old lon: {lon}; New lon: {newLon}");
 
         // Call GenerateCubemap with new latitude and longitude
         GenerateCubemap(newLat.ToString(), newLon.ToString());
