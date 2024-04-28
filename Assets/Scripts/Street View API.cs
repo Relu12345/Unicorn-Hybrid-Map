@@ -54,7 +54,7 @@ public class StreetViewAPI : MonoBehaviour
         addressInputField.onEndEdit.AddListener(OnAddressEndEdit);
     }
 
-    private void OnAddressEndEdit(string address)
+    public void OnAddressEndEdit(string address)
     {
         StartCoroutine(GetGeocodeAndGenerateCubemap(address));
     }

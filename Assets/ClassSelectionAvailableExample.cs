@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static Gtec.UnityInterface.BCIManager;
+using TMPro;
 
 public class ClassSelectionAvailableExample : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class ClassSelectionAvailableExample : MonoBehaviour
 
     [SerializeField] ERPFlashController3D _flashController;
     [SerializeField] Dictionary<int, Renderer> _selectedObjects;
+    [SerializeField] TMP_InputField inputField;
     void Start()
     {
 
@@ -87,10 +89,14 @@ public class ClassSelectionAvailableExample : MonoBehaviour
                         break;
 
                     case 6:
-                    if(recorded){
-                        Speech2Text.instance.SendRecording();
-                        recorded=false;
-                    }
+                        if(recorded)
+                        {
+                            _streetViewAPI.OnAddressEndEdit(inputField.text);
+
+                            GePeTo_Integration.instance.OnSubmitButtonClicked();
+                            Speech2Text.instance.SendRecording();
+                            recorded=false;
+                        }
                         break;
                 }
             }

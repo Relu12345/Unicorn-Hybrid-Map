@@ -1895,6 +1895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _streetViewAPI: {fileID: 692207762}
   _flashController: {fileID: 675572407}
+  inputField: {fileID: 0}
 --- !u!1 &692207761
 GameObject:
   m_ObjectHideFlags: 0
@@ -4164,6 +4165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de6bf15e43de1cb4ab5f0fc3272f9660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _streetViewAPI: {fileID: 692207762}
   necaz_de_input: {fileID: 1973205869}
 --- !u!114 &1817198994
 MonoBehaviour:
