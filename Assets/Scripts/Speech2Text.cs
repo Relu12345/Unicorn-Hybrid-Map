@@ -76,7 +76,7 @@ public class Speech2Text : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator SendRecording()
+    public IEnumerator SendRecording()
     {
         //outputText.color = Color.yellow;
         input.text = "Processing...";

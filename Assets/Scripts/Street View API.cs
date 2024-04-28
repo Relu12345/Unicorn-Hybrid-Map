@@ -3,13 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Networking;
 using TMPro;
-using Meta.WitAi;
 
 public class StreetViewAPI : MonoBehaviour
 {
-    /*
-     * Blonda ,sexy, fundul mare, se intoarce, este mane.
-     */
     [System.Serializable]
     private class GeocodeResponse
     {
@@ -48,10 +44,15 @@ public class StreetViewAPI : MonoBehaviour
 
     private void Start()
     {
-        currentLatitude = 45.758276f;
-        currentLongitude = 21.228940f;
+        currentLatitude = 45.7574972f;
+        currentLongitude = 21.2263437f;
         GenerateCubemap(currentLatitude.ToString(), currentLongitude.ToString());
         addressInputField.onEndEdit.AddListener(OnAddressEndEdit);
+    }
+
+    public void EnterText()
+    {
+        addressInputField.onEndEdit.Invoke(addressInputField.text);
     }
 
     public void OnAddressEndEdit(string address)
@@ -89,37 +90,17 @@ public class StreetViewAPI : MonoBehaviour
     }
 
 
-    IEnumerator Front;
-    IEnumerator Right;
-    IEnumerator Back;
-    IEnumerator Left;
-    IEnumerator Up;
-    IEnumerator Down;
-    IEnumerator Time;
-    bool firstRun = true;
     private void GenerateCubemap(string latitude, string longitude)
     {
-       
-            Front = GetStreetViewImage(latitude, longitude, 0, 0, fov); // Front
-            Right = GetStreetViewImage(latitude, longitude, 90, 0, fov); // Right
-            Back = GetStreetViewImage(latitude, longitude, 180, 0, fov); // Back
-            Left = GetStreetViewImage(latitude, longitude, 270, 0, fov); // Left
-            Up = GetStreetViewImage(latitude, longitude, 0, 90, fov); // Up
-            Down = GetStreetViewImage(latitude, longitude, 0, -90, fov); // Down
-            Time = WaitTime();
-         
-           
-        StartCoroutine(Front);
-        StartCoroutine(Right);
-        StartCoroutine(Back);
-        StartCoroutine(Left);
-        StartCoroutine(Up);
-        StartCoroutine(Down);
-        StartCoroutine(Time);
+        StartCoroutine(GetStreetViewImage(latitude, longitude, 0, 0, fov)); // Front
+        StartCoroutine(GetStreetViewImage(latitude, longitude, 90, 0, fov)); // Right
+        StartCoroutine(GetStreetViewImage(latitude, longitude, 180, 0, fov)); // Back
+        StartCoroutine(GetStreetViewImage(latitude, longitude, 270, 0, fov)); // Left
+        StartCoroutine(GetStreetViewImage(latitude, longitude, 0, 90, fov)); // Up
+        StartCoroutine(GetStreetViewImage(latitude, longitude, 0, -90, fov)); // Down
 
-
+        StartCoroutine(WaitTime());
     }
-
 
     private IEnumerator GetStreetViewImage(string latitude, string longitude, int heading, int pitch, int fov)
     {
@@ -144,58 +125,29 @@ public class StreetViewAPI : MonoBehaviour
         {
             case 0:
                 if (pitch == 0)
-                {
-                    //frontTex.DestroySafely();
                     frontTex = texture;
-                }
                 else if (pitch == 90)
-                {
-                    //upTex.DestroySafely();
                     upTex = texture;
-                }
                 else if (pitch == -90)
-                {
-                    //downTex.DestroySafely();
-                    downTex = texture; }
+                    downTex = texture;
                 break;
             case 90:
-                {
-                    //leftTex.DestroySafely();
-                    leftTex = texture;
-                    break;
-                }
+                leftTex = texture;
+                break;
             case 180:
-                {
-                   //backTex.DestroySafely();
-                    backTex = texture;
-                    break;
-                }
+                backTex = texture;
+                break;
             case 270:
-                {
-                   //rightTex.DestroySafely();
-                    rightTex = texture;
-                    break;
-                }
+                rightTex = texture;
+                break;
         }
-        
+
         www.Dispose();
-     
     }
 
     private IEnumerator WaitTime()
     {
-        StopCoroutine(Right);
-        StopCoroutine(Back);
-        StopCoroutine(Left);
-        StopCoroutine(Up);
-        StopCoroutine(Down);
-        System.GC.Collect();
-
         yield return new WaitForSeconds(1f);
-        
-       
-
-
         SetSkybox();
     }
 
@@ -209,36 +161,34 @@ public class StreetViewAPI : MonoBehaviour
         skyboxMaterial.SetTexture("_DownTex", downTex);
 
         RenderSettings.skybox = skyboxMaterial;
-
-       //bool status = true;
     }
 
     // Call this function when the North button is pressed
     public void MoveNorth()
     {
         Debug.Log("[STREET] Selected North");
-        MoveInDirection(0, 5); // 0 degrees heading (North), 5 meters forward
+        MoveInDirection(0, 15); // 0 degrees heading (North), 5 meters forward
     }
 
     // Call this function when the South button is pressed
     public void MoveSouth()
     {
         Debug.Log("[STREET] Selected South");
-        MoveInDirection(180, 5); // 180 degrees heading (South), 5 meters forward
+        MoveInDirection(180, 15); // 180 degrees heading (South), 5 meters forward
     }
 
     // Call this function when the East button is pressed
     public void MoveEast()
     {
         Debug.Log("[STREET] Selected East");
-        MoveInDirection(90, 5); // 90 degrees heading (East), 5 meters forward
+        MoveInDirection(90, 15); // 90 degrees heading (East), 5 meters forward
     }
 
     // Call this function when the West button is pressed
     public void MoveWest()
     {
         Debug.Log("[STREET] Selected West");
-        MoveInDirection(270, 5); // 270 degrees heading (West), 5 meters forward
+        MoveInDirection(270, 15); // 270 degrees heading (West), 5 meters forward
     }
 
     private bool canGenerateCubemap = true; // Flag to check if generating cubemap is allowed
@@ -246,7 +196,7 @@ public class StreetViewAPI : MonoBehaviour
     private IEnumerator CubemapCooldown()
     {
         canGenerateCubemap = false;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(30f);
         canGenerateCubemap = true;
     }
 
@@ -255,6 +205,7 @@ public class StreetViewAPI : MonoBehaviour
         // Check if generating cubemap is allowed
         if (!canGenerateCubemap)
         {
+            Debug.Log("Cubemap generation is on cooldown. Wait for 30 seconds.");
             return;
         }
 
@@ -266,23 +217,21 @@ public class StreetViewAPI : MonoBehaviour
         switch (heading)
         {
             case 0: // North
-                lat += 0.00005f * distance; // Move north by adding a small value to latitude
+                lat += 0.0001f * distance; // Move north by adding a small value to latitude
                 break;
             case 90: // East
-                lon += 0.00005f * distance; // Move east by adding a small value to longitude
+                lon += 0.0001f * distance; // Move east by adding a small value to longitude
                 break;
             case 180: // South
-                lat -= 0.00005f * distance; // Move south by subtracting a small value from latitude
+                lat -= 0.0001f * distance; // Move south by subtracting a small value from latitude
                 break;
             case 270: // West
-                lon -= 0.00005f * distance; // Move west by subtracting a small value from longitude
+                lon -= 0.0001f * distance; // Move west by subtracting a small value from longitude
                 break;
             default:
                 Debug.LogError("Invalid heading.");
                 return;
         }
-
-        Debug.Log($"lat: {lat}; lon: {lon}");
 
         // Generate cubemap for the new location
         GenerateCubemap(lat.ToString(), lon.ToString());
