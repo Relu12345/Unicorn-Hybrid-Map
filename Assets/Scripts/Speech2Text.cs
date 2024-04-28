@@ -14,6 +14,25 @@ public class Speech2Text : MonoBehaviour
     private byte[] bytes;
     private bool recording;
 
+public static Speech2Text instance;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            Initialise();
+        }
+        else
+            Destroy(gameObject);
+    }
+    bool _initialised = false;
+    private void Initialise()
+    {
+        if (_initialised)
+            return;
+    }
+
+
     private void Start()
     {
         startButton.onClick.AddListener(StartRecording);
@@ -27,17 +46,17 @@ public class Speech2Text : MonoBehaviour
         }
     }
 
-    private void StartRecording()
+    public void StartRecording()
     {
         //outputText.color = Color.white;
         input.text = "Recording...";
         startButton.interactable = false;
-        StartCoroutine(RecordForSeconds(3f));
+        StartCoroutine(RecordForSeconds(1f));
     }
 
     private IEnumerator RecordForSeconds(float duration)
     {
-        yield return new WaitForSeconds(duration + 2);
+        //yield return new WaitForSeconds(duration + 2);
         clip = Microphone.Start(null, false, (int)duration, 44100);
         yield return new WaitForSeconds(duration);
         recording = true;
@@ -55,7 +74,7 @@ public class Speech2Text : MonoBehaviour
         SendRecording();
     }
 
-    private void SendRecording()
+    public void SendRecording()
     {
         //outputText.color = Color.yellow;
         input.text = "Processing...";

@@ -4084,6 +4084,8 @@ GameObject:
   - component: {fileID: 1817198991}
   - component: {fileID: 1817198990}
   - component: {fileID: 1817198992}
+  - component: {fileID: 1817198994}
+  - component: {fileID: 1817198993}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -4150,6 +4152,33 @@ MonoBehaviour:
   input: {fileID: 1973205869}
   output: {fileID: 1623342948}
   apiConfig: {fileID: 11400000, guid: 61b30074070fd3846b9c6c2626dbce5c, type: 2}
+--- !u!114 &1817198993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817198989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de6bf15e43de1cb4ab5f0fc3272f9660, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  necaz_de_input: {fileID: 1973205869}
+--- !u!114 &1817198994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817198989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdabc25acf668cc4c8af109751b7febd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startButton: {fileID: 1585898628}
+  input: {fileID: 1973205869}
 --- !u!1 &1874511533
 GameObject:
   m_ObjectHideFlags: 0
