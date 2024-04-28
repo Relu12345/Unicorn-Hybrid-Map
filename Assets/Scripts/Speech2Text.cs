@@ -60,10 +60,10 @@ public class Speech2Text : MonoBehaviour
         clip = Microphone.Start(null, false, (int)duration, 44100);
         yield return new WaitForSeconds(duration);
         recording = true;
-        StopRecording();
+        yield return StopRecording();
     }
 
-    private void StopRecording()
+    private IEnumerator StopRecording()
     {
         var position = Microphone.GetPosition(null);
         Microphone.End(null);
@@ -71,10 +71,12 @@ public class Speech2Text : MonoBehaviour
         clip.GetData(samples, 0);
         bytes = EncodeAsWAV(samples, clip.frequency, clip.channels);
         recording = false;
-        SendRecording();
+        yield return SendRecording();
+
+        yield return null;
     }
 
-    public void SendRecording()
+    private IEnumerator SendRecording()
     {
         //outputText.color = Color.yellow;
         input.text = "Processing...";
@@ -83,11 +85,14 @@ public class Speech2Text : MonoBehaviour
             input.text = response;
             //GePeTo_Integration.instance.OnSubmitButtonClicked();
             startButton.interactable = true;
+            return;
         }, error => {
             //outputText.color = Color.red;
-            input.text = error;
+            //input.text = error;
             startButton.interactable = true;
+            return;
         });
+        return null;
     }
 
     private byte[] EncodeAsWAV(float[] samples, int frequency, int channels)
