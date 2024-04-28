@@ -7,6 +7,9 @@ using Meta.WitAi;
 
 public class StreetViewAPI : MonoBehaviour
 {
+    /*
+     * Blonda ,sexy, fundul mare, se intoarce, este mane.
+     */
     [System.Serializable]
     private class GeocodeResponse
     {
