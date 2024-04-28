@@ -44,8 +44,8 @@ public class StreetViewAPI : MonoBehaviour
 
     private void Start()
     {
-        currentLatitude = -13.1650709f;
-        currentLongitude = -72.5447154f;
+        currentLatitude = 45.7574972f;
+        currentLongitude = 21.2263437f;
         GenerateCubemap(currentLatitude.ToString(), currentLongitude.ToString());
         addressInputField.onEndEdit.AddListener(OnAddressEndEdit);
     }
@@ -136,6 +136,8 @@ public class StreetViewAPI : MonoBehaviour
                 rightTex = texture;
                 break;
         }
+
+        www.Dispose();
     }
 
     private IEnumerator WaitTime()
@@ -154,62 +156,84 @@ public class StreetViewAPI : MonoBehaviour
         skyboxMaterial.SetTexture("_DownTex", downTex);
 
         RenderSettings.skybox = skyboxMaterial;
+
+        status = true;
     }
 
     // Call this function when the North button is pressed
     public void MoveNorth()
     {
         Debug.Log("[STREET] Selected North");
-        MoveInDirection(0, 5); // 0 degrees heading (North), 5 meters forward
+        MoveInDirection(0, 15); // 0 degrees heading (North), 5 meters forward
     }
 
     // Call this function when the South button is pressed
     public void MoveSouth()
     {
         Debug.Log("[STREET] Selected South");
-        MoveInDirection(180, 5); // 180 degrees heading (South), 5 meters forward
+        MoveInDirection(180, 15); // 180 degrees heading (South), 5 meters forward
     }
 
     // Call this function when the East button is pressed
     public void MoveEast()
     {
         Debug.Log("[STREET] Selected East");
-        MoveInDirection(90, 5); // 90 degrees heading (East), 5 meters forward
+        MoveInDirection(90, 15); // 90 degrees heading (East), 5 meters forward
     }
 
     // Call this function when the West button is pressed
     public void MoveWest()
     {
         Debug.Log("[STREET] Selected West");
-        MoveInDirection(270, 5); // 270 degrees heading (West), 5 meters forward
+        MoveInDirection(270, 15); // 270 degrees heading (West), 5 meters forward
     }
 
-    // Function to move in a specific direction by a certain distance
+    private bool canGenerateCubemap = true; // Flag to check if generating cubemap is allowed
+
+    private IEnumerator CubemapCooldown()
+    {
+        canGenerateCubemap = false;
+        yield return new WaitForSeconds(3f);
+        canGenerateCubemap = true;
+    }
+
     private void MoveInDirection(float heading, float distance)
     {
+        // Check if generating cubemap is allowed
+        if (!canGenerateCubemap)
+        {
+            Debug.Log("Cubemap generation is on cooldown. Wait for 30 seconds.");
+            return;
+        }
+
         // Convert latitude and longitude to float
         float lat = currentLatitude;
         float lon = currentLongitude;
 
-        // Calculate new latitude and longitude based on the direction and distance
-        float newLat = lat + (distance / 111111); // Approximately 1 degree latitude = 111111 meters
-        float newLon = lon;
-
-        if (heading == 0 || heading == 180)
+        // Calculate the new latitude and longitude based on the heading
+        switch (heading)
         {
-            // Moving North or South changes longitude
-            newLon = lon + (distance / (111111 * Mathf.Cos(lat * Mathf.Deg2Rad)));
-        }
-        else if (heading == 90 || heading == 270)
-        {
-            // Moving East or West changes latitude
-            newLon = lon + (distance / (111111 * Mathf.Cos(lat * Mathf.Deg2Rad)));
+            case 0: // North
+                lat += 0.0001f * distance; // Move north by adding a small value to latitude
+                break;
+            case 90: // East
+                lon += 0.0001f * distance; // Move east by adding a small value to longitude
+                break;
+            case 180: // South
+                lat -= 0.0001f * distance; // Move south by subtracting a small value from latitude
+                break;
+            case 270: // West
+                lon -= 0.0001f * distance; // Move west by subtracting a small value from longitude
+                break;
+            default:
+                Debug.LogError("Invalid heading.");
+                return;
         }
 
-        Debug.Log($"[STREET] Old lat: {lat}; New lat: {newLat}");
-        Debug.Log($"[STREET] Old lon: {lon}; New lon: {newLon}");
+        // Generate cubemap for the new location
+        GenerateCubemap(lat.ToString(), lon.ToString());
 
-        // Call GenerateCubemap with new latitude and longitude
-        GenerateCubemap(newLat.ToString(), newLon.ToString());
+        // Start the cooldown coroutine
+        StartCoroutine(CubemapCooldown());
     }
 }
